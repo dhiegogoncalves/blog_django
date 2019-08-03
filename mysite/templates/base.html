@@ -1,12 +1,32 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="{% static 'style.css' %}">
-    <title>Title</title>
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <title>{% block title %} {% endblock title %}</title>
 </head>
 <body>
-
+<header>
+    <div class="nav-left">
+        <h1><a href="/">Blog - Home</a></h1>
+    </div>
+    <div class="nav-left">
+        <h1><a href="{% url 'post_new' %}">Nova Postagem no Blog</a></h1>
+    </div>
+</header>
+<div class="container">
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li
+                {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}
+        </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% block content %} {% endblock content %}
+</div>
 </body>
 </html>
