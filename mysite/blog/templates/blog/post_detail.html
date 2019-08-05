@@ -1,12 +1,19 @@
 {% extends 'base.html' %}
 
-{% block title %} Blog - Detalhe {% endblock title %}
+{% block title %}Detalhe{% endblock title %}
 
 {% block content %}
-<div class="post-entry">
-    <h2>{{object.titulo}}</h2>
-    <p>{{object.conteudo}}</p>
+<div class="container justify-content-center">
+    <div class="card">
+        <div class="card-header">
+            <h1>Editar Postagem</h1>
+        </div>
+        <div class="card-body">
+            <h2>{{object.titulo}}</h2>
+            <p>{{object.conteudo|safe}}</p>
+            <a href="{{object.get_absolute_url_update}}">+ Editar</a>
+            <a href="{{object.get_absolute_url_delete}}">+ Deletar</a>
+        </div>
+    </div>
 </div>
-<a href="{{object.get_absolute_url_update}}">+ Editar</a>
-<a href="{{object.get_absolute_url_delete}}">+ Deletar</a>
 {% endblock content %}

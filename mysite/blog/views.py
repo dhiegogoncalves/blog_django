@@ -4,7 +4,7 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
-from .forms import UserCreationFormWithEmail
+from .forms import UserCreationFormWithEmail, PostForm
 from .models import Post
 
 
@@ -15,10 +15,16 @@ class BlogListView(ListView):
 
 class BlogCreateView(SuccessMessageMixin, CreateView):
     model = Post
-    fields = ['autor', 'titulo', 'conteudo']
+    form_class = PostForm
     template_name = 'blog/post_new.html'
     # context_object_name = 'post'
-    success_message = "%(field)s - criado com sucesso"
+    success_message = "%(field)s, criado com sucesso"
+
+    def form_valid(self, form):
+        obj = form.save(commit=False)
+        obj.autor = self.request.user
+        obj.save()
+        return super().form_valid(form)
 
     def get_success_message(self, cleaned_data):
         return self.success_message % dict(
@@ -29,9 +35,15 @@ class BlogCreateView(SuccessMessageMixin, CreateView):
 
 class BlogUpdateView(SuccessMessageMixin, UpdateView):
     model = Post
-    fields = ['autor', 'titulo', 'conteudo']
+    form_class = PostForm
     template_name = 'blog/post_edit.html'
-    success_message = "%(field)s - alterado com sucesso"
+    success_message = "%(field)s, alterado com sucesso"
+
+    def form_valid(self, form):
+        obj = form.save(commit=False)
+        obj.autor = self.request.user
+        obj.save()
+        return super().form_valid(form)
 
     def get_success_message(self, cleaned_data):
         return self.success_message % dict(
