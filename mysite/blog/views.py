@@ -1,8 +1,10 @@
 from django.contrib import messages
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
+from .forms import UserCreationFormWithEmail
 from .models import Post
 
 
@@ -52,3 +54,9 @@ class BlogDeleteView(SuccessMessageMixin, DeleteView):
     def delete(self, request, *args, **kwargs):
         messages.success(self.request, self.success_message)
         return super(BlogDeleteView, self).delete(request, *args, **kwargs)
+
+
+class BlogSignUpView(CreateView):
+    form_class = UserCreationFormWithEmail
+    success_url = reverse_lazy('login')
+    template_name = 'blog/signup.html'
