@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load bootstrap %}
+
+{% block title %} Contato {% endblock title %}
+
+{% block header %}
+<header class="masthead" style="background-image: url({% static 'img/contact-bg.jpg' %})">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-md-10 mx-auto">
+                <div class="page-heading">
+                    <h1>Entre em contato conosco</h1>
+                    <span class="subheading">Tem alguma pergunta?</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+{% endblock header %}
+
+{% block content %}
+<div class="col-lg-8 col-md-10 mx-auto">
+    {% if success %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        E-mail enviado com sucesso!
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {% endif %}
+    <form method="post" action="{% url 'contact' %}">
+        {% csrf_token %}
+        {{form|bootstrap}}
+        <a href="javascript:history.back();" class="btn btn-primary">Voltar</a>
+        <input type="submit" class="btn btn-success float-right" value="Enviar">
+    </form>
+</div>
+{% endblock content %}

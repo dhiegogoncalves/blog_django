@@ -1,10 +1,12 @@
 from django.contrib import messages
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
+from django.core.mail import EmailMessage
+from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
-from .forms import UserCreationFormWithEmail, PostForm
+from .forms import UserCreationFormWithEmail, PostForm, ContactForm
 from .models import Post
 
 
@@ -13,7 +15,7 @@ class BlogListView(ListView):
     template_name = 'blog/home.html'
 
 
-class BlogCreateView(SuccessMessageMixin, CreateView):
+class BlogCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     model = Post
     form_class = PostForm
     template_name = 'blog/post_new.html'
@@ -33,7 +35,7 @@ class BlogCreateView(SuccessMessageMixin, CreateView):
         )
 
 
-class BlogUpdateView(SuccessMessageMixin, UpdateView):
+class BlogUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Post
     form_class = PostForm
     template_name = 'blog/post_edit.html'
@@ -57,7 +59,7 @@ class BlogDetailView(DetailView):
     template_name = 'blog/post_detail.html'
 
 
-class BlogDeleteView(SuccessMessageMixin, DeleteView):
+class BlogDeleteView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
     model = Post
     template_name = 'blog/post_delete.html'
     success_url = reverse_lazy('home')
@@ -68,7 +70,36 @@ class BlogDeleteView(SuccessMessageMixin, DeleteView):
         return super(BlogDeleteView, self).delete(request, *args, **kwargs)
 
 
-class BlogSignUpView(CreateView):
+class BlogSignUpView(LoginRequiredMixin, CreateView):
     form_class = UserCreationFormWithEmail
     success_url = reverse_lazy('login')
     template_name = 'blog/signup.html'
+
+
+def contact(request):
+    send = False
+
+    form = ContactForm(request.POST or None)
+    if form.is_valid():
+        nome = request.POST.get('nome', '')
+        email = request.POST.get('email', '')
+        mensagem = request.POST.get('mensagem', '')
+        email = EmailMessage(
+            'Mensagem do Blog Django',
+            f'De {nome} <{email}> Escreveu: \n\n {mensagem}',
+            'no-reply',
+            ['django@gmail.com'],
+            reply_to=[email]
+        )
+        try:
+            email.send()
+            send = True
+        except:
+            send = False
+
+    context = {
+        'form': form,
+        'success': send
+    }
+
+    return render(request, 'blog/contact.html', context)

@@ -25,6 +25,7 @@ wheels/
 *.egg
 MANIFEST
 .idea
+mysite/media/blog/
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
@@ -103,3 +104,4 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+/mysite/media/blog/

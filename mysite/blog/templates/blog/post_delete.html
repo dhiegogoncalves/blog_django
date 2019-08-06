@@ -12,8 +12,10 @@
         <div class="card-body">
             <form action="" method="post">
                 {% csrf_token %}
-                <p class="card-text">Você tem certeza, que deseja deletar o registo "{{post.titulo}} ?"</p>
-                <input type="submit" class="btn btn-danger" value="Confirmar">
+                <p class="card-text">Você tem certeza, que deseja deletar o registo <strong>{{post.titulo}}</strong>?
+                </p>
+                <a href="javascript:history.back();" class="btn btn-primary">Voltar</a>
+                <input type="submit" class="btn btn-danger float-right" value="Confirmar">
             </form>
         </div>
     </div>

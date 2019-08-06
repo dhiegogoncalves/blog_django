@@ -1,7 +1,24 @@
 {% extends 'base.html' %}
 {% load bootstrap %}
+{% load static %}
 
 {% block title %} Editar Postagem {% endblock title %}
+
+{% block header %}
+<header class="masthead" style="background-image: url({% static 'img/home-bg.jpg' %})">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-md-10 mx-auto">
+                <div class="site-heading">
+                    <h1>Blog</h1>
+                    <span class="subheading"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+{% endblock header %}
 
 {% block content %}
 <div class="container justify-content-center">
@@ -13,7 +30,8 @@
             <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 {{form|bootstrap}}
-                <input type="submit" class="btn btn-primary" value="Salvar">
+                <a href="javascript:history.back();" class="btn btn-primary">Voltar</a>
+                <input type="submit" class="btn btn-success float-right" value="Salvar">
             </form>
         </div>
     </div>

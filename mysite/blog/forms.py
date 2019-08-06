@@ -2,7 +2,7 @@ from ckeditor.widgets import CKEditorWidget
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from django.forms import ModelForm
+from django.forms import ModelForm, Form
 
 from .models import Post
 
@@ -27,3 +27,9 @@ class PostForm(ModelForm):
     class Meta:
         model = Post
         fields = ['titulo', 'conteudo', 'categoria', 'imagem', 'status']
+
+
+class ContactForm(Form):
+    nome = forms.CharField(label='Nome', widget=forms.TextInput(attrs={'placeholder': 'Digite seu nome'}))
+    email = forms.EmailField(label='E-mail', widget=forms.TextInput(attrs={'placeholder': 'Digite seu e-mail'}))
+    mensagem = forms.CharField(label='Assunto', widget=forms.Textarea(attrs={'placeholder': 'Digite o assunto'}))
